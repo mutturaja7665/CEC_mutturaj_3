@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix Clone</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #141414;
+      color: #fff;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+    }
+
+    .navbar img {
+      height: 30px;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .navbar a:hover {
+      color: #b9090b;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background-image: url('https://assets.nflxext.com/ffe/siteui/vlv3/b7bffec1-0704-4d59-bbe4-25df41b45d83/7b908bb0-b7d5-41b0-8099-ff77af9e1469/IN-en-20231009-popsignuptwoweeks-perspective_alpha_website_large.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-content button {
+      background-color: #e50914;
+      border: none;
+      padding: 10px 25px;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .hero-content button:hover {
+      background-color: #f40612;
+    }
+
+    /* Movie Rows */
+    .movie-section {
+      padding: 80px 40px 40px;
+    }
+
+    .movie-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .movie-row {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+    }
+
+    .movie-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .movie {
+      min-width: 200px;
+      height: 120px;
+      border-radius: 6px;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .movie img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .movie:hover {
+      transform: scale(1.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .navbar ul {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div class="navbar">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix Logo">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">TV Shows</a></li>
+      <li><a href="#">Movies</a></li>
+      <li><a href="#">Latest</a></li>
+      <li><a href="#">My List</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero Banner -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Unlimited movies, TV shows, and more.</h1>
+      <p>Watch anywhere. Cancel anytime.</p>
+      <button>Watch Now</button>
+    </div>
+  </div>
+
+  <!-- Movie Rows -->
+  <section class="movie-section">
+    <h2>Trending Now</h2>
+    <div class="movie-row">
+      <div class="movie"><img src="https://m.media-amazon.com/images/M/MV5BZTUzN2Y5ODctMjBjOC00ZTliLWEzNjgtZTE1NTgzYjY1OGVjXkEyXkFqcGc@._V1_.jpg" alt=""></div>
+      <div class="movie"><img src="https://m.media-amazon.com/images/I/91v7xgPDBPL._AC_UF1000,1000_QL80_.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p185958_b_v13_ae.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p155226_p_v13_an.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p7825626_p_v13_ah.jpg" alt=""></div>
+    </div>
+  </section>
+
+  <section class="movie-section">
+    <h2>Top Picks for You</h2>
+    <div class="movie-row">
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p22804_p_v10_ab.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p7825626_p_v13_ah.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p185958_b_v13_ae.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p155226_p_v13_an.jpg" alt=""></div>
+      <div class="movie"><img src="https://flxt.tmsimg.com/assets/p22804_p_v10_ab.jpg" alt=""></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Netflix Clone — Made for educational purposes</p>
+  </footer>
+
+</body>
+</html>

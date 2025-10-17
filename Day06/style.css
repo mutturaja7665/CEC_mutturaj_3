@@ -1,0 +1,26 @@
+body{
+    background-color: #333;
+    color: green;
+    text-align: center;
+
+}
+.btn-like{
+    background-color: aquamarine;
+    color: green;
+    font-size: 1.5rem;
+    border: red;
+    padding-right: 10px;
+    padding-left: 2rem;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+.btn-ulike{
+    background: yellow;
+    color: red;
+    font-size: 1.5rem;
+    border: red;
+    padding-right: 10px;
+    padding-left: 2rem;
+    margin-right: 1rem;
+    cursor: pointer;
+}

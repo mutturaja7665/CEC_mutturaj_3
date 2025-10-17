@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BookMyShow + PhonePe</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+  body{background:#f5f5f5;color:#333;}
+  header{background:#ff3d00;color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;}
+  header h1{font-size:1.5rem;}
+  .movies{display:flex;flex-wrap:wrap;gap:20px;padding:20px;justify-content:center;}
+  .movie-card{background:#fff;border-radius:12px;overflow:hidden;width:220px;box-shadow:0 4px 12px rgba(0,0,0,0.1);cursor:pointer;transition:transform 0.2s;}
+  .movie-card:hover{transform:translateY(-5px);}
+  .movie-card img{width:100%;height:300px;object-fit:cover;}
+  .movie-card .content{padding:15px;}
+  .movie-card .content h3{margin-bottom:10px;}
+  .showtime-btn{background:#ff3d00;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:bold;margin:5px;}
+  .hidden{display:none;}
+  /* Seat Selection */
+  .seat-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin:20px 0;}
+  .seat{width:30px;height:30px;background:#ccc;border-radius:4px;cursor:pointer;}
+  .seat.selected{background:#ff3d00;}
+  .seat-info{margin-bottom:20px;}
+  button{padding:8px 15px;border:none;border-radius:6px;cursor:pointer;background:#ff3d00;color:white;margin:5px;}
+  /* QR Payment Modal */
+  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);justify-content:center;align-items:center;z-index:1000;}
+  .modal-content{background:#fff;padding:20px;border-radius:10px;max-width:400px;width:90%;text-align:center;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>BookMyShow Clone</h1>
+</header>
+
+<main>
+  <section id="movies">
+    <div class="movies">
+      <div class="movie-card" onclick="openShowtimes('Avengers: Endgame')">
+        <img src="https://via.placeholder.com/220x300?text=Avengers" alt="">
+        <div class="content"><h3>Avengers: Endgame</h3></div>
+      </div>
+      <div class="movie-card" onclick="openShowtimes('Spider-Man: No Way Home')">
+        <img src="https://via.placeholder.com/220x300?text=Spider-Man" alt="">
+        <div class="content"><h3>Spider-Man: No Way Home</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="showtimes" class="hidden">
+    <h2 id="showtimeMovie"></h2>
+    <div>
+      <button class="showtime-btn" onclick="openSeats('10:00 AM')">10:00 AM</button>
+      <button class="showtime-btn" onclick="openSeats('1:00 PM')">1:00 PM</button>
+      <button class="showtime-btn" onclick="openSeats('4:00 PM')">4:00 PM</button>
+    </div>
+    <button onclick="backToMovies()">Back to Movies</button>
+  </section>
+
+  <section id="seatSelection" class="hidden">
+    <h2>Select Seats: <span id="seatMovie"></span> (<span id="seatTime"></span>)</h2>
+    <div class="seat-grid" id="seatGrid"></div>
+    <div class="seat-info">
+      Selected: <span id="selectedCount">0</span>
+      <button onclick="pay()">Pay via PhonePe</button>
+    </div>
+    <button onclick="backToShowtimes()">Back to Showtimes</button>
+  </section>
+</main>
+
+<!-- QR Payment Modal -->
+<div class="modal" id="qrModal">
+  <div class="modal-content">
+    <h3>Scan to Pay</h3>
+    <div id="qrcode"></div>
+    <button onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- QRCode.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+let selectedMovie = '';
+let selectedTime = '';
+let selectedSeats = [];
+
+function openShowtimes(movie){
+  selectedMovie = movie;
+  document.getElementById('movies').classList.add('hidden');
+  document.getElementById('showtimes').classList.remove('hidden');
+  document.getElementById('showtimeMovie').innerText = movie;
+}
+
+function backToMovies(){
+  document.getElementById('showtimes').classList.add('hidden');
+  document.getElementById('movies').classList.remove('hidden');
+}
+
+function openSeats(time){
+  selectedTime = time;
+  document.getElementById('showtimes').classList.add('hidden');
+  document.getElementById('seatSelection').classList.remove('hidden');
+  document.getElementById('seatMovie').innerText = selectedMovie;
+  document.getElementById('seatTime').innerText = selectedTime;
+  generateSeats();
+}
+
+function backToShowtimes(){
+  document.getElementById('seatSelection').classList.add('hidden');
+  document.getElementById('showtimes').classList.remove('hidden');
+  selectedSeats = [];
+  updateSeatCount();
+}
+
+function generateSeats(){
+  const seatGrid = document.getElementById('seatGrid');
+  seatGrid.innerHTML = '';
+  for(let i=1;i<=32;i++){
+    const seat = document.createElement('div');
+    seat.classList.add('seat');
+    seat.innerText = i;
+    seat.onclick = () => toggleSeat(i, seat);
+    seatGrid.appendChild(seat);
+  }
+}
+
+function toggleSeat(number, element){
+  const index = selectedSeats.indexOf(number);
+  if(index > -1){
+    selectedSeats.splice(index,1);
+    element.classList.remove('selected');
+  } else {
+    selectedSeats.push(number);
+    element.classList.add('selected');
+  }
+  updateSeatCount();
+}
+
+function updateSeatCount(){
+  document.getElementById('selectedCount').innerText = selectedSeats.length;
+}
+
+function pay(){
+  if(selectedSeats.length === 0){
+    alert('Select at least one seat');
+    return;
+  }
+  document.getElementById('qrModal').style.display = 'flex';
+  document.getElementById('qrcode').innerHTML = '';
+  new QRCode(document.getElementById('qrcode'), {
+    text: `upi://pay?pa=demo@phonepe&pn=Demo User&am=${selectedSeats.length*150}`,
+    width: 200,
+    height: 200
+  });
+}
+
+function closeModal(){
+  document.getElementById('qrModal').style.display = 'none';
+  alert(`Payment for ${selectedSeats.length} seats done! Enjoy the movie.`);
+  selectedSeats = [];
+  backToMovies();
+}
+</script>
+</body>
+</html>
